@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Event Registration - Campus Connect</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVIGATION BAR
+====================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        Campus Connect
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('events') }}">
+            Events
+        </a>
+
+        <a href="{{ url_for('register') }}"
+           class="active">
+            Register
+        </a>
+
+        <a href="{{ url_for('login') }}">
+            Admin
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =====================================================
+     REGISTRATION CONTAINER
+====================================================== -->
+
+<div class="registration-container">
+
+    <div class="registration-box">
+
+        <h1>
+            Event Registration
+        </h1>
+
+        <p class="registration-subtitle">
+            Register for your favourite campus event
+        </p>
+
+
+        <!-- =================================================
+             SUCCESS MESSAGE
+        ================================================== -->
+
+        {% if success %}
+
+        <div class="success-message">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <h2>
+                Registration Successful!
+            </h2>
+
+            <p>
+                Congratulations,
+                <strong>{{ student_name }}</strong>!
+            </p>
+
+            <p>
+                You have successfully registered for:
+            </p>
+
+            <strong class="registered-event">
+                {{ event }}
+            </strong>
+
+
+            <div class="success-actions">
+
+                <a href="{{ url_for('events') }}"
+                   class="back-button">
+                    Browse More Events
+                </a>
+
+                <a href="{{ url_for('admin') }}"
+                   class="back-button">
+                    Admin Dashboard
+                </a>
+
+            </div>
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- =================================================
+             REGISTRATION FORM
+        ================================================== -->
+
+        <form method="POST"
+              action="{{ url_for('submit_registration') }}">
+
+
+            <!-- Student Name -->
+
+            <div class="form-group">
+
+                <label for="student_name">
+                    Student Name
+                </label>
+
+                <input
+                    type="text"
+                    id="student_name"
+                    name="student_name"
+                    placeholder="Enter your full name"
+                    required
+                >
+
+            </div>
+
+
+            <!-- USN -->
+
+            <div class="form-group">
+
+                <label for="usn">
+                    USN
+                </label>
+
+                <input
+                    type="text"
+                    id="usn"
+                    name="usn"
+                    placeholder="Enter your USN"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Email -->
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Phone -->
+
+            <div class="form-group">
+
+                <label for="phone">
+                    Phone Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Enter your phone number"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Department -->
+
+            <div class="form-group">
+
+                <label for="department">
+                    Department
+                </label>
+
+                <select
+                    id="department"
+                    name="department"
+                    required
+                >
+
+                    <option value="">
+                        Select Department
+                    </option>
+
+                    <option value="Computer Science">
+                        Computer Science
+                    </option>
+
+                    <option value="Information Science">
+                        Information Science
+                    </option>
+
+                    <option value="Electronics and Communication">
+                        Electronics and Communication
+                    </option>
+
+                    <option value="Electrical and Electronics">
+                        Electrical and Electronics
+                    </option>
+
+                    <option value="Mechanical">
+                        Mechanical
+                    </option>
+
+                    <option value="Civil">
+                        Civil
+                    </option>
+
+                    <option value="Artificial Intelligence">
+                        Artificial Intelligence
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Year -->
+
+            <div class="form-group">
+
+                <label for="year">
+                    Year
+                </label>
+
+                <select
+                    id="year"
+                    name="year"
+                    required
+                >
+
+                    <option value="">
+                        Select Year
+                    </option>
+
+                    <option value="1st Year">
+                        1st Year
+                    </option>
+
+                    <option value="2nd Year">
+                        2nd Year
+                    </option>
+
+                    <option value="3rd Year">
+                        3rd Year
+                    </option>
+
+                    <option value="4th Year">
+                        4th Year
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- =================================================
+                 EVENT DROPDOWN
+            ================================================== -->
+
+            <div class="form-group">
+
+                <label for="event">
+                    Select Event
+                </label>
+
+                <select
+                    id="event"
+                    name="event"
+                    required
+                >
+
+                    <option value="">
+                        Select an Event
+                    </option>
+
+
+                    <!--
+                        Events are loaded directly
+                        from the SQLite database.
+                    -->
+
+                    {% for event_item in events %}
+
+                    <option value="{{ event_item['name'] }}">
+
+                        {{ event_item['emoji'] }}
+                        {{ event_item['name'] }}
+
+                    </option>
+
+                    {% endfor %}
+
+
+                </select>
+
+            </div>
+
+
+            <!-- Terms -->
+
+            <div class="terms">
+
+                <label>
+
+                    <input
+                        type="checkbox"
+                        required
+                    >
+
+                    I confirm that the information
+                    provided is correct.
+
+                </label>
+
+            </div>
+
+
+            <!-- Submit -->
+
+            <button
+                type="submit"
+                class="submit-button"
+            >
+
+                Register for Event
+
+            </button>
+
+
+        </form>
+
+
+        {% endif %}
+
+    </div>
+
+</div>
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const selectedEvent = localStorage.getItem("selectedEvent");
+
+    const eventDropdown = document.getElementById("event");
+
+    if (selectedEvent && eventDropdown) {
+
+        for (let i = 0; i < eventDropdown.options.length; i++) {
+
+            if (eventDropdown.options[i].value === selectedEvent) {
+
+                eventDropdown.selectedIndex = i;
+                break;
+
+            }
+
+        }
+
+        localStorage.removeItem("selectedEvent");
+    }
+
+});
+
+</script>
+
+</body>
+
+</html>

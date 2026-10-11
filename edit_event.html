@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Edit Event - Campus Connect</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="nav-container">
+
+        <div class="logo">
+
+            <span class="logo-icon">🎓</span>
+
+            <span>Campus Connect</span>
+
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('home') }}">
+                Home
+            </a>
+
+            <a href="{{ url_for('events') }}">
+                Events
+            </a>
+
+            <a href="{{ url_for('home') }}#about">
+                About
+            </a>
+
+            <a href="{{ url_for('home') }}#register">
+                Register
+            </a>
+
+            <a href="{{ url_for('admin') }}">
+                Admin
+            </a>
+
+            <a href="{{ url_for('logout') }}">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     EDIT EVENT
+===================================================== -->
+
+<main class="admin-dashboard">
+
+    <div class="section-container">
+
+
+        <!-- HEADER -->
+
+        <div class="admin-header">
+
+            <span class="section-label">
+                EVENT MANAGEMENT
+            </span>
+
+            <h1>
+                Edit Event
+            </h1>
+
+            <p>
+                Update the details of your campus event.
+            </p>
+
+        </div>
+
+
+
+        <!-- EDIT CARD -->
+
+        <div class="admin-card">
+
+
+            <div class="admin-card-header">
+
+                <div>
+
+                    <span class="section-label">
+                        UPDATE EVENT
+                    </span>
+
+                    <h2>
+                        Event Details
+                    </h2>
+
+                    <p>
+                        Modify the event information below.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FORM -->
+
+            <form
+                method="POST"
+                action="{{ url_for('update_event', event_id=event['id']) }}"
+                class="admin-form"
+            >
+
+
+                <!-- EVENT NAME -->
+
+                <div class="form-group">
+
+                    <label for="eventName">
+                        Event Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="eventName"
+                        name="name"
+                        value="{{ event['name'] or '' }}"
+                        placeholder="Enter event name"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group">
+
+                    <label for="eventDescription">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="eventDescription"
+                        name="description"
+                        rows="5"
+                        placeholder="Enter event description"
+                        required
+                    >{{ event['description'] or '' }}</textarea>
+
+                </div>
+
+
+
+                <!-- DATE -->
+
+                <div class="form-group">
+
+                    <label for="eventDate">
+                        Event Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="eventDate"
+                        name="date"
+                        value="{{ event['date'] or '' }}"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- VENUE -->
+
+                <div class="form-group">
+
+                    <label for="eventVenue">
+                        Venue
+                    </label>
+
+                    <input
+                        type="text"
+                        id="eventVenue"
+                        name="venue"
+                        value="{{ event['venue'] or '' }}"
+                        placeholder="Enter event venue"
+                        required
+                    >
+
+                </div>
+                <div class="form-group">
+                  <label for="eventImage">Change Event Image</label>
+
+                   <input
+                        type="file"
+                        id="eventImage"
+                        name="event_image"
+                        accept="image/*"
+                         >
+                </div>
+
+
+
+                <!-- BUTTONS -->
+
+                <div class="event-actions">
+
+                    <button
+                        type="submit"
+                        class="submit-btn"
+                    >
+                        💾 Save Changes
+                    </button>
+
+
+                    <a
+                        href="{{ url_for('admin') }}"
+                        class="edit-event-btn"
+                    >
+                        ← Cancel
+                    </a>
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <div class="footer-bottom">
+
+        <p>
+            © 2026 Campus Connect. All rights reserved.
+        </p>
+
+    </div>
+
+</footer>
+
+
+</body>
+
+</html>

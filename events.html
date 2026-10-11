@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Events - Campus Connect</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav class="navbar">
+
+    <div class="nav-container">
+
+
+        <!-- LOGO -->
+
+        <div class="logo">
+
+            <span class="logo-icon">
+                🎓
+            </span>
+
+            <span>
+                Campus Connect
+            </span>
+
+        </div>
+
+
+
+        <!-- NAVIGATION -->
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('home') }}">
+                Home
+            </a>
+
+            <a
+                href="{{ url_for('events') }}"
+                class="active"
+            >
+                Events
+            </a>
+
+            <a href="{{ url_for('home') }}#about">
+                About
+            </a>
+
+            <a href="{{ url_for('home') }}#register">
+                Register
+            </a>
+
+            <a href="{{ url_for('login') }}">
+                Admin
+            </a>
+
+        </div>
+
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================================================
+     PAGE HEADER
+========================================================= -->
+
+<section class="page-header">
+
+    <div class="section-container">
+
+
+        <span class="section-label">
+            CAMPUS EVENTS
+        </span>
+
+
+        <h1>
+            Explore Events
+        </h1>
+
+
+        <p>
+            Discover upcoming events and opportunities
+            happening on your campus.
+        </p>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     EVENTS SECTION
+========================================================= -->
+
+<section class="events-page-section">
+
+    <div class="section-container">
+
+
+        <!-- =================================================
+             SEARCH
+        ================================================== -->
+
+        <div class="event-search">
+
+            <div class="search-box">
+
+                <span class="search-icon">
+                    🔎
+                </span>
+
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search events by name, category, venue..."
+                >
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             EVENT GRID
+        ================================================== -->
+
+        <div
+            class="event-grid"
+            id="eventContainer"
+        >
+
+
+            {% if events %}
+
+
+                {% for event in events %}
+
+
+                <div class="event-card">
+
+
+                    <!-- =====================================
+                         EVENT IMAGE
+                    ====================================== -->
+
+                    {% if event['image'] %}
+                    <div class="event-image-container">
+                      <img
+                        src="{{ url_for('static', filename='uploads/' + event['image']) }}"
+                        alt="{{ event['name'] }}"
+                        class="event-image"
+                        onclick="openImage(this.src)"
+                        >
+                      </div>
+                    {% endif %}    
+
+
+
+                    <!-- =====================================
+                         EVENT CONTENT
+                    ====================================== -->
+
+                    <div class="event-card-content">
+
+
+                        <!-- CATEGORY -->
+
+                        {% if event['category'] %}
+
+                        <span class="event-category">
+
+                            {{ event['category'] }}
+
+                        </span>
+
+                        {% endif %}
+
+
+
+                        <!-- EVENT NAME -->
+
+                        <h3>
+
+                            {{ event['name'] }}
+
+                        </h3>
+
+
+
+                        <!-- DESCRIPTION -->
+
+                        {% if event['description'] %}
+
+                        <p>
+
+                            {{ event['description'] }}
+
+                        </p>
+
+                        {% endif %}
+
+
+
+                        <!-- EVENT DETAILS -->
+
+                        <div class="event-details">
+
+
+                            <!-- DATE -->
+
+                            {% if event['date'] %}
+
+                            <div class="event-detail">
+
+                                <span class="detail-icon">
+                                    📅
+                                </span>
+
+                                <span>
+                                    {{ event['date'] }}
+                                </span>
+
+                            </div>
+
+                            {% endif %}
+
+
+
+                            <!-- TIME -->
+
+                            {% if event['time'] %}
+
+                            <div class="event-detail">
+
+                                <span class="detail-icon">
+                                    🕐
+                                </span>
+
+                                <span>
+                                    {{ event['time'] }}
+                                </span>
+
+                            </div>
+
+                            {% endif %}
+
+
+
+                            <!-- VENUE -->
+
+                            {% if event['venue'] %}
+
+                            <div class="event-detail">
+
+                                <span class="detail-icon">
+                                    📍
+                                </span>
+
+                                <span>
+                                    {{ event['venue'] }}
+                                </span>
+
+                            </div>
+
+                            {% endif %}
+
+
+                        </div>
+
+
+
+                        <!-- =================================
+                             REGISTER BUTTON
+                        ================================== -->
+
+                        <div class="event-actions">
+
+
+                            <a
+                                href="{{ url_for('home') }}#register"
+                                class="register-event-btn register-event-link"
+                                data-event="{{ event['name'] }}"
+                            >
+
+                                Register Now →
+
+                            </a>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                {% endfor %}
+
+
+            {% else %}
+
+
+                <!-- =====================================
+                     NO EVENTS
+                ====================================== -->
+
+                <div class="no-events">
+
+                    <h3>
+                        No Events Available
+                    </h3>
+
+
+                    <p>
+                        There are currently no events available.
+                        Please check again later.
+                    </p>
+
+                </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     IMAGE MODAL
+========================================================= -->
+
+<div
+    id="imageModal"
+    class="image-modal"
+>
+
+
+    <!-- CLOSE BUTTON -->
+
+    <span
+        id="imageModalClose"
+        class="image-modal-close"
+    >
+        &times;
+    </span>
+
+
+
+    <!-- FULL IMAGE -->
+
+    <img
+        id="fullImage"
+        src=""
+        alt="Event Image"
+    >
+
+
+</div>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="footer">
+
+
+    <div class="footer-container">
+
+
+        <!-- FOOTER BRAND -->
+
+        <div class="footer-brand">
+
+
+            <div class="logo">
+
+                <span class="logo-icon">
+                    🎓
+                </span>
+
+                <span>
+                    Campus Connect
+                </span>
+
+            </div>
+
+
+            <p>
+                Connecting students with campus opportunities.
+            </p>
+
+
+        </div>
+
+
+
+        <!-- FOOTER LINKS -->
+
+        <div class="footer-links">
+
+
+            <a href="{{ url_for('home') }}">
+                Home
+            </a>
+
+
+            <a href="{{ url_for('events') }}">
+                Events
+            </a>
+
+
+            <a href="{{ url_for('home') }}#about">
+                About
+            </a>
+
+
+            <a href="{{ url_for('home') }}#register">
+                Register
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- COPYRIGHT -->
+
+    <div class="footer-bottom">
+
+        <p>
+            © 2026 Campus Connect. All rights reserved.
+        </p>
+
+    </div>
+
+
+</footer>
+
+
+
+<!-- =========================================================
+     SCRIPT.JS
+========================================================= -->
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+
+<!-- =========================================================
+     EVENTS PAGE JAVASCRIPT
+========================================================= -->
+
+<script>
+
+
+/* =========================================================
+   SEARCH EVENTS
+========================================================= */
+
+const searchInput =
+    document.getElementById("searchInput");
+
+
+const eventContainer =
+    document.getElementById("eventContainer");
+
+
+if (searchInput && eventContainer) {
+
+
+    searchInput.addEventListener(
+        "input",
+        function () {
+
+
+            const searchText =
+                searchInput.value
+                .toLowerCase()
+                .trim();
+
+
+            const eventCards =
+                eventContainer.querySelectorAll(
+                    ".event-card"
+                );
+
+
+            eventCards.forEach(
+                function (card) {
+
+
+                    const eventText =
+                        card.textContent
+                        .toLowerCase();
+
+
+                    if (
+                        eventText.includes(searchText)
+                    ) {
+
+                        card.style.display = "";
+
+                    } else {
+
+                        card.style.display = "none";
+
+                    }
+
+
+                }
+            );
+
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   OPEN IMAGE
+========================================================= */
+
+function openImage(imageSrc) {
+
+
+    const modal =
+        document.getElementById("imageModal");
+
+
+    const fullImage =
+        document.getElementById("fullImage");
+
+
+    if (!modal || !fullImage) {
+
+        return;
+
+    }
+
+
+    fullImage.src = imageSrc;
+
+
+    modal.style.display = "flex";
+
+
+}
+
+
+
+/* =========================================================
+   CLOSE IMAGE
+========================================================= */
+
+function closeImage() {
+
+
+    const modal =
+        document.getElementById("imageModal");
+
+
+    const fullImage =
+        document.getElementById("fullImage");
+
+
+    if (!modal || !fullImage) {
+
+        return;
+
+    }
+
+
+    modal.style.display = "none";
+
+
+    fullImage.src = "";
+
+
+}
+
+
+
+/* =========================================================
+   IMAGE CLICK
+========================================================= */
+
+const eventImages =
+    document.querySelectorAll(".event-image");
+
+
+eventImages.forEach(
+    function (image) {
+
+
+        image.addEventListener(
+            "click",
+            function () {
+
+                openImage(this.src);
+
+            }
+        );
+
+
+    }
+);
+
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+const closeButton =
+    document.getElementById("imageModalClose");
+
+
+if (closeButton) {
+
+
+    closeButton.addEventListener(
+        "click",
+        function () {
+
+            closeImage();
+
+        }
+    );
+
+
+}
+
+
+
+/* =========================================================
+   CLICK OUTSIDE IMAGE
+========================================================= */
+
+const imageModal =
+    document.getElementById("imageModal");
+
+
+if (imageModal) {
+
+
+    imageModal.addEventListener(
+        "click",
+        function (event) {
+
+
+            if (event.target === imageModal) {
+
+                closeImage();
+
+            }
+
+
+        }
+    );
+
+
+}
+
+
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+
+        if (event.key === "Escape") {
+
+            closeImage();
+
+        }
+
+
+    }
+);
+
+
+
+/* =========================================================
+   REGISTER BUTTON
+========================================================= */
+
+const registerLinks =
+    document.querySelectorAll(
+        ".register-event-link"
+    );
+
+
+registerLinks.forEach(
+    function (link) {
+
+
+        link.addEventListener(
+            "click",
+            function () {
+
+
+                const eventName =
+                    this.getAttribute(
+                        "data-event"
+                    );
+
+
+                /*
+                 * Store selected event temporarily.
+                 * The home page can use this value.
+                 */
+
+                if (eventName) {
+
+                    sessionStorage.setItem(
+                        "selectedEvent",
+                        eventName
+                    );
+
+                }
+
+
+            }
+        );
+
+
+    }
+);
+
+
+</script>
+<div id="imageModal" class="image-modal">
+    <span id="imageModalClose" class="image-modal-close">&times;</span>
+    <img id="fullImage" src="" alt="Full-size event image">
+</div>
+
+<script>
+function openImage(imageSrc) {
+    const modal = document.getElementById("imageModal");
+    const fullImage = document.getElementById("fullImage");
+
+    fullImage.src = imageSrc;
+    modal.style.display = "flex";
+}
+
+function closeImage() {
+    document.getElementById("imageModal").style.display = "none";
+    document.getElementById("fullImage").src = "";
+}
+
+document.getElementById("imageModalClose").addEventListener("click", closeImage);
+
+document.getElementById("imageModal").addEventListener("click", function(event) {
+    if (event.target === this) {
+        closeImage();
+    }
+});
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {
+        closeImage();
+    }
+});
+</script>
+
+</body>
+
+</html>
